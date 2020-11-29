@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+       <appender name="assignment"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+              <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                     <fileNamePattern>logs/assignment.%d{yyyy-MM-dd}.log
+                     </fileNamePattern>
+                     <maxHistory>10</maxHistory>
+              </rollingPolicy>
+              <encoder>
+                     <pattern>%-5level %d [%thread] %logger{36} - %msg%n</pattern>
+              </encoder>
+       </appender>
+
+       <logger name="com.uxpsystems" additivity="false" level="DEBUG">
+              <appender-ref ref="assignment" />
+       </logger>
+<!--     <logger name="com.zaxxer.hikari" level="INFO" />
+ -->
+    <logger name="org.springframework" level="INFO" />
+<!--     <logger name="org.apache" level="INFO" /> -->
+    <logger name="org.hibernate" level="INFO" />
+
+       <root level="INFO">
+              <appender-ref ref="assignment" />
+       </root>
+</configuration>
