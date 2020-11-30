@@ -22,10 +22,10 @@ public interface UserService {
 	User getUser(String name);
 
 	/**
-	 * This method is used to delete user from DB based on id passed
-	 * @param id
+	 * This method is used to delete user from DB based on name passed
+	 * @param name
 	 */
-	void deleteUser(long id);
+	void deleteUser(String name);
 
 	/**
 	 * This method is used to update user data in DB

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -49,7 +48,6 @@ public class UserServiceImplTest {
 		List<User> mockResponse = CommonUtils.mapObject(List.class, "/all_user_response_mock.json");
 		Mockito.when(repository.findAll()).thenReturn(mockResponse);
 		List<User> users = service.getAllUsers();
-
 		System.out.println(users);
 		assertNotNull(users);
 	}
@@ -75,13 +73,13 @@ public class UserServiceImplTest {
 	 * @throws Exception
 	 * 
 	 */
-	@Ignore
+	@Test
 	public void updateUserSuccessTest() throws Exception {
 		Optional<User> mockResponse = Optional.of(CommonUtils.mapObject(User.class, "/single_user_response_mock.json"));
 
 		User updateResponse = CommonUtils.mapObject(User.class, "/update_user_response_mock.json");
 
-		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(mockResponse);
+		Mockito.when(repository.findByUserName(Mockito.anyString())).thenReturn(mockResponse);
 		Mockito.when(repository.save(Mockito.any())).thenReturn(updateResponse);
 		User user = service.updateUser(mockResponse.get());
 		System.out.println(user);
@@ -96,7 +94,9 @@ public class UserServiceImplTest {
 	 */
 	@Test
 	public void deleteUserSuccessTest() throws Exception {
-		service.deleteUser(Mockito.anyLong());
+		Optional<User> mockResponse = Optional.of(CommonUtils.mapObject(User.class, "/single_user_response_mock.json"));
+		Mockito.when(repository.findByUserName(Mockito.anyString())).thenReturn(mockResponse);
+		service.deleteUser(Mockito.anyString());
 	}
 
 	/**
@@ -105,15 +105,13 @@ public class UserServiceImplTest {
 	 * @throws Exception
 	 * 
 	 */
-	@Ignore
+	@Test
 	public void addUserSuccessTest() throws Exception {
 		Optional<User> mockResponse = Optional.of(CommonUtils.mapObject(User.class, "/single_user_response_mock.json"));
-
 		User updateResponse = CommonUtils.mapObject(User.class, "/update_user_response_mock.json");
-
-		Mockito.when(repository.findByUserName(Mockito.anyString())).thenReturn(mockResponse);
+		Mockito.when(repository.findByUserName(Mockito.anyString())).thenReturn(Optional.empty());
 		Mockito.when(repository.save(Mockito.any())).thenReturn(updateResponse);
-		User user = service.updateUser(mockResponse.get());
+		User user = service.addUser(mockResponse.get());
 		System.out.println(user);
 		assertNotNull(user);
 	}

@@ -6,10 +6,10 @@ Feature Details:
 	API			                | Description
 	----------------------------| -----------
 	GET /users	      	        | Perform operation to fetch all the User details
-	GET /user/{username}	    | Perform operation to fetch User specific details based on name passed	 
+	GET /user/{name}	        | Perform operation to fetch User specific details based on name passed	 
 	POST /add/user		        | Perform operation to add new User 
 	PUT /update/user		    | Perform operation to update the existing User details
-	DELETE /delete/user/{id}	| Perform operation to delete the existing User
+	DELETE /delete/user/{name}	| Perform operation to delete the existing User
 	DELETE /delete/users    	| Perform operation to delete all User entries
 2. All the 6 APIS secured with Basic Authentication using Spring security
 3. Method level security provided for data manipulation operations like DELETE, ADD and UPDATE
@@ -46,7 +46,7 @@ Usage:
 	curl --location --request GET 'http://localhost:9090/users' \
          --header 'Authorization: Basic dXNlcjE6cGFzc3dvcmQ=' \
          --header 'Cookie: JSESSIONID=19F3CD3B2E3168BF50E910F26DE819E3'	
-	B) GET /user/{username}
+	B) GET /user/{name}
 	curl --location --request GET 'http://localhost:9090/user/test1' \
          --header 'Authorization: Basic dXNlcjE6cGFzc3dvcmQ=' \
          --header 'Cookie: JSESSIONID=19F3CD3B2E3168BF50E910F26DE819E3'
@@ -60,8 +60,8 @@ Usage:
                       "password":"pass",
                       "status":"active"
                      }'	
-	D) DELETE /delete/user/{id}
-	curl --location --request DELETE 'http://localhost:9090/delete/user/3' \
+	D) DELETE /delete/user/{name}
+	curl --location --request DELETE 'http://localhost:9090/delete/user/test1' \
          --header 'Authorization: Basic YWRtaW46YWRtaW4=' \
          --header 'Cookie: JSESSIONID=19F3CD3B2E3168BF50E910F26DE819E3'
     E) PUT /update/user

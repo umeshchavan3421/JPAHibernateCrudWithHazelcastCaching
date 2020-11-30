@@ -38,7 +38,6 @@ public class UserController {
 	
 	@GetMapping("/users")
 	public ResponseEntity<List<User>> getAllUsers() {
-
 		long start = System.currentTimeMillis();
 		List<User> users = userService.getAllUsers();
 		long end = System.currentTimeMillis();
@@ -93,13 +92,13 @@ public class UserController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@DeleteMapping("/delete/user/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable long id) {
+	@DeleteMapping("/delete/user/{name}")
+	public ResponseEntity<String> deleteUser(@PathVariable String name) {
 		long start = System.currentTimeMillis();
-		userService.deleteUser(id);
+		userService.deleteUser(name);
 		long end = System.currentTimeMillis();
 		LOGGER.info("User deleted successfully in {} ms. [{} Sec]", (end - start), (end - start) / 1000);
-		LOGGER.info("User deleted successfully with ID: {}", id);
+		LOGGER.info("User deleted successfully with name: {}", name);
 
 		return new ResponseEntity<>("User deleted successfully",HttpStatus.OK);
 	}

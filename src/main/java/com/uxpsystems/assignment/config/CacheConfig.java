@@ -24,7 +24,7 @@ public class CacheConfig {
 		return new Config().setInstanceName("hazelcastInstance")
 				.addMapConfig(new MapConfig().setName("UserCache")
 						.setMaxSizeConfig(new MaxSizeConfig(200, MaxSizePolicy.FREE_HEAP_SIZE))
-						.setEvictionPolicy(EvictionPolicy.LRU).setTimeToLiveSeconds(2000));
+						.setEvictionPolicy(EvictionPolicy.LRU).setTimeToLiveSeconds(200));
 	}
 
 }

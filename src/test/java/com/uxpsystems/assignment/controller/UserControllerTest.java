@@ -152,14 +152,14 @@ public class UserControllerTest {
 	}
 
 	/**
-	 * It tests success response to delete user by id
+	 * It tests success response to delete user by name
 	 * 
 	 * @throws Exception
 	 * 
 	 */
 	@Test
 	public void deleteUserSuccessTest() throws Exception {
-		String controllerResponse = mockMvc.perform(delete("/delete/user/1")).andExpect(status().isOk()).andReturn()
+		String controllerResponse = mockMvc.perform(delete("/delete/user/test1")).andExpect(status().isOk()).andReturn()
 				.getResponse().getContentAsString();
 		System.out.println(controllerResponse);
 		assertEquals("User deleted successfully", controllerResponse);

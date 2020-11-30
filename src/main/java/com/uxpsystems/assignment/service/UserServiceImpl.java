@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Cacheable(cacheNames = { "UserCache" })
+	//@Cacheable(cacheNames = { "UserCache" })
 	@Transactional(value = "jpaTransactionManager")
 	public List<User> getAllUsers() {
 		LOGGER.info("Fetching all User details.");
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
 		LOGGER.info("Fetching user with Name: {}", name);
 		Optional<User> user = userRepository.findByUserName(name);
 		System.out.println("First Hit to DB get by name");
-		if (user.isPresent()) {
+		if (user.isPresent()) { 
 			return user.get();
 		} else {
 			throw new UserNotFoundException("User [" + name + "] doesn't exist");
@@ -83,10 +84,10 @@ public class UserServiceImpl implements UserService {
 	 * 
 	 */
 	@Transactional(value = "jpaTransactionManager")
-	@Cacheable(cacheNames = { "UserCache" })
+	@CachePut(value = "UserCache" , key = "#user.userName")
 	public User updateUser(User user) {
 		LOGGER.info("Updating user details: {}", user);
-		Optional<User> existingUser = userRepository.findById(user.getId());
+		Optional<User> existingUser = userRepository.findByUserName(user.getUserName());
 		if (!existingUser.isPresent()) {
 			throw new UserNotFoundException("Failed to update the user [" + user + "] as user doesn't exist");
 		}
@@ -105,12 +106,19 @@ public class UserServiceImpl implements UserService {
 	 * 
 	 * @return
 	 */
+	@Override
 	@Transactional(value = "jpaTransactionManager")
-	@CacheEvict(cacheNames = "UserCache", key = "#id", allEntries = true)
-	public void deleteUser(long id) {
-		LOGGER.info("Deleting user with ID: {}", id);
-		userRepository.deleteById(id);
-		System.out.println("User Deleted");
+	@CacheEvict(value = "UserCache" , key ="#name")
+	public void deleteUser(String name) {
+		LOGGER.info("Deleting user with ID: {}", name);
+		Optional<User> user = userRepository.findByUserName(name);
+		if(user.isPresent()) {
+			userRepository.deleteById(user.get().getId());
+			System.out.println("User Deleted");
+		}else {
+			throw new UserNotFoundException("Failed to update the user [" + user + "] as user doesn't exist");
+		}
+		
 	}
 
 	/**
@@ -120,6 +128,7 @@ public class UserServiceImpl implements UserService {
 	 * 
 	 * @return
 	 */
+	@Override
 	@Transactional(value = "jpaTransactionManager")
 	@CacheEvict(value = "UserCache", allEntries = true)
 	public void deleteAllUsers() {
@@ -135,7 +144,6 @@ public class UserServiceImpl implements UserService {
 	 * @return User
 	 */
 	@Transactional(value = "jpaTransactionManager")
-	@Cacheable(cacheNames = { "UserCache" })
 	public User addUser(User user) {
 		LOGGER.info("Adding user: {}", user);
 		Optional<User> existingUser = userRepository.findByUserName(user.getUserName());
